@@ -1,0 +1,27 @@
+{
+  "name": "jotter-tmp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next dev --experimental-https",
+    "build": "next build",
+    "start": "next start"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@tailwindcss/postcss": "^4.0.1",
+    "@vis.gl/react-google-maps": "^1.5.1",
+    "next": "^15.1.6",
+    "postcss": "^8.5.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "tailwindcss": "^4.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "22.12.0",
+    "@types/react": "19.0.8",
+    "typescript": "5.7.3"
+  }
+}
