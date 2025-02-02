@@ -43,3 +43,21 @@ const textMediaSchema = new Schema<ITextMedia>({
 });
 
 export const TextMedia = Media.discriminator("TextMedia", textMediaSchema);
+
+export type IFileMedia = {
+	url: string;
+	publicId: string;
+	type: string;
+	size: number;
+	createdAt: Date;
+}
+
+const fileMediaSchema = new Schema<IFileMedia>({
+	url: {type: String, required: true},
+	publicId: {type: String, required: true},
+	type: {type: String, required: true},
+	size: {type: Number, required: true},
+	createdAt: {type: Date, required: true},
+});
+
+export const FileMedia = Media.discriminator("FileMedia", fileMediaSchema);
