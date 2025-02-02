@@ -1,36 +1,45 @@
-import mongoose from "mongoose";
+import { Schema, Types, model } from "mongoose";
 
-const mediaSchema = new mongoose.Schema({}, { discriminatorKey: "kind" });
+export type IMedia = {
+	kind: string,
+}
 
-const Media = mongoose.model("Media", mediaSchema);
+const mediaSchema = new Schema<IMedia>({}, { discriminatorKey: "kind" });
 
-const spotifyMediaSchema = new mongoose.Schema({
+export const Media = model("Media", mediaSchema);
+
+export type ISpotifyMedia = {
+	uri: string,
+}
+
+const spotifyMediaSchema = new Schema<ISpotifyMedia>({
 	uri: String,
 });
 
-const SpotifyMedia = Media.discriminator(
+export const SpotifyMedia = Media.discriminator(
 	"SpotifyMedia",
 	spotifyMediaSchema
 );
 
-const youtubeMediaSchema = new mongoose.Schema({
+export type IToutubeMedia = {
+	videoId: string,
+}
+
+const youtubeMediaSchema = new Schema<IToutubeMedia>({
 	videoId: String,
 });
 
-const YoutubeMedia = Media.discriminator(
+export const YoutubeMedia = Media.discriminator(
 	"YoutubeMedia",
 	youtubeMediaSchema
 );
 
-const textMediaSchema = new mongoose.Schema({
+export type ITextMedia = {
+	text: string,
+}
+
+const textMediaSchema = new Schema<ITextMedia>({
 	text: String,
 });
 
-const TextMedia = Media.discriminator("TextMedia", textMediaSchema);
-
-export {
-	Media,
-	SpotifyMedia,
-	YoutubeMedia,
-	TextMedia
-};
+export const TextMedia = Media.discriminator("TextMedia", textMediaSchema);

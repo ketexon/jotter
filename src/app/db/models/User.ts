@@ -1,6 +1,10 @@
 import mongoose from "mongoose";
 
-const userSchema = new mongoose.Schema({
+export type IUser = {
+	username: string;
+}
+
+const userSchema = new mongoose.Schema<IUser>({
 	username: String,
 });
 
