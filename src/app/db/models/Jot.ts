@@ -1,19 +1,31 @@
-import mongoose from "mongoose";
+import { Schema, Types, model } from "mongoose";
 
-const jotSchema = new mongoose.Schema({
+export type IJot = {
+	creator: Types.ObjectId,
+	lat: number,
+	lng: number,
+	text: string,
+	created: Date,
+	updated: Date,
+	media: Types.ObjectId,
+};
+
+const jotSchema = new Schema<IJot>({
 	creator: {
-		type: mongoose.Schema.Types.ObjectId,
+		type: Schema.Types.ObjectId,
 		ref: "User",
 	},
 	lat: Number,
 	lng: Number,
 	text: String,
-	created: Date,
-	updated: Date,
+	created: {
+		type: Date,
+		default: Date.now,
+	},
 	media: {
-		type: mongoose.Schema.Types.ObjectId,
+		type: Schema.Types.ObjectId,
 		ref: "Media",
 	},
 });
 
-export const Jot = mongoose.model("Jot", jotSchema)
+export const Jot = model("Jot", jotSchema)
