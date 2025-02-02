@@ -1,6 +1,6 @@
 "use client";
 
-import { APIProvider, Map } from '@vis.gl/react-google-maps';
+import { AdvancedMarker, APIProvider, Map, Marker } from '@vis.gl/react-google-maps';
 import React from 'react';
 
 const API_KEY = process.env.NEXT_PUBLIC_MAPS_API_KEY
@@ -9,6 +9,7 @@ const MAP_ID = process.env.NEXT_PUBLIC_MAP_ID
 const CACHED_POSITION_KEY = "jotter--cached-position";
 
 export function MapApp() {
+	const [userLocation, setUserLocation] = React.useState<google.maps.LatLngLiteral>(undefined);
 	const [center, setCenter] = React.useState<google.maps.LatLngLiteral>(undefined);
 
 	React.useEffect(() => {
@@ -28,24 +29,24 @@ export function MapApp() {
 		}
 	}, [])
 
-	console.log(MAP_ID);
-
 	React.useEffect(() => {
-		navigator.geolocation.getCurrentPosition(
+		const watch = navigator.geolocation.watchPosition(
 			(position) => {
 				const latitude = position.coords.latitude;
 				const longitude = position.coords.longitude;
 
-				setCenter({ lat: latitude, lng: longitude });
+				setUserLocation({ lat: latitude, lng: longitude });
+				if(center === undefined){
+					setCenter({ lat: latitude, lng: longitude });
+				}
 			},
-			(error) => {
-				console.error(error);
-			},
+			() => {},
 			{
 				enableHighAccuracy: true,
 				timeout: 10000,
 			}
 		);
+		return () => navigator.geolocation.clearWatch(watch);
 	}, []);
 
 	React.useEffect(() => {
@@ -53,8 +54,6 @@ export function MapApp() {
 			localStorage.setItem(CACHED_POSITION_KEY, JSON.stringify(center));
 		}
 	}, [center]);
-
-	console.log(center)
 
 	return <APIProvider apiKey={API_KEY}>
 		{center &&
@@ -66,10 +65,20 @@ export function MapApp() {
 				defaultZoom={18}
 				gestureHandling={'greedy'}
 				disableDefaultUI={true}
-				maxZoom={18}
-				minZoom={10}
+				maxZoom={20}
+				minZoom={12}
 				mapId={MAP_ID}
-			/>
+			>
+				{ userLocation &&
+					<AdvancedMarker
+						position={userLocation}
+						title={'User location'}
+						anchorPoint={["50%", "50%"]}
+					>
+						<div className="w-4 h-4 bg-red-500 rounded-full"></div>
+					</AdvancedMarker>
+				}
+			</Map>
 		}
 	</APIProvider>
 }
