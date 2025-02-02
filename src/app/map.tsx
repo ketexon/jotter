@@ -2,6 +2,7 @@
 
 import { AdvancedMarker, APIProvider, Map, Marker } from '@vis.gl/react-google-maps';
 import React from 'react';
+import { useRouter } from 'next/navigation';
 
 const API_KEY = process.env.NEXT_PUBLIC_MAPS_API_KEY
 const MAP_ID = process.env.NEXT_PUBLIC_MAP_ID
@@ -9,13 +10,13 @@ const MAP_ID = process.env.NEXT_PUBLIC_MAP_ID
 const CACHED_POSITION_KEY = "jotter--cached-position";
 
 export type MapAppProps = {
-	setDrawerOpen: (v: boolean) => void,
 }
 
 export function MapApp(props: MapAppProps) {
 	const {
-		setDrawerOpen,
 	} = props;
+
+	const router = useRouter();
 
 	const [userLocation, setUserLocation] = React.useState<google.maps.LatLngLiteral>(undefined);
 	const [center, setCenter] = React.useState<google.maps.LatLngLiteral>(undefined);
@@ -80,7 +81,7 @@ export function MapApp(props: MapAppProps) {
 				{ userLocation &&
 					<AdvancedMarker
 						clickable
-						onClick={() => setDrawerOpen(true)}
+						onClick={() => router.push("/jots")}
 						position={userLocation}
 						title={'User location'}
 						anchorPoint={["50%", "50%"]}
